@@ -1,6 +1,3 @@
-import os
-import pandas
-import pyteomics
 
 from pyteomics.mztab import MzTab
 
