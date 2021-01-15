@@ -3,37 +3,18 @@ import argparse
 import pandas as pd
 from pyteomics.mztab import MzTab
 
+
 # Read mztab file 
 def read_mztab(input_path, output_path):
     mztab = MzTab(input_path)
-    if mztab.variant == 'P':
-        return read_mztab_p(mztab,output_path)
-    elif mztab.variant == 'M':
-        return read_mztab_m(mztab, output_path)
-
-# Processing mztab "P"
-def read_mztab_p(mztab, output_path):
     mtd = pd.DataFrame.from_dict(mztab.metadata, orient='index')
     mtd.to_csv(os.path.join(output_path, "mtd.tsv"), sep="\t")
-    prt = mztab.protein_table
-    prt.to_csv(os.path.join(output_path, "prt.tsv"), sep="\t")
-    pep = mztab.peptide_table
-    pep.to_csv(os.path.join(output_path, "pep.tsv"), sep="\t")
-    psm = mztab.spectrum_match_table
-    psm.to_csv(os.path.join(output_path, "psm.tsv"), sep="\t")
-    sml = mztab.small_molecule_table
-    sml.to_csv(os.path.join(output_path, "sml.tsv"), sep="\t")
-    
-# Processing mztab "M"
-def read_mztab_m(mztab, output_path):
-    mtd = pd.DataFrame.from_dict(mztab.metadata, orient='index')
-    mtd.to_csv(os.path.join(output_path, "mtd.tsv"), sep="\t")
-    sml = mztab.small_molecule_table
-    sml.to_csv(os.path.join(output_path, "sml.tsv"), sep="\t")
-    smf = mztab.small_molecule_feature_table
-    smf.to_csv(os.path.join(output_path, "smf.tsv"), sep="\t")
-    sme = mztab.small_molecule_evidence_table
-    sme.to_csv(os.path.join(output_path, "sme.tsv"), sep="\t")
+    for name, tab in mztab:
+        if not tab.empty:
+            tab.to_csv(os.path.join(output_path, f"{name.lower()}.tsv"), sep="\t")
+        else:
+            with open(os.path.join(output_path, f"{name.lower()}.tsv"), "w") as my_empty_csv:
+                pass
 
 
 if __name__ == "__main__":
