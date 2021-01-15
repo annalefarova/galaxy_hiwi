@@ -21,16 +21,20 @@ if __name__ == "__main__":
     # Create the parser
     my_parser = argparse.ArgumentParser(description='List of paths')
     # Add the arguments
-    my_parser.add_argument('--path_in',
-                        metavar='path',
-                        type=str,
-                        required=True,
-                        help='the path of input .mztab file')
-    my_parser.add_argument('--path_out',
-                        metavar='path',
-                        type=str,
-                        default=os.getcwd(),
-                        help='the path of folder for output .tsv file')
+    my_parser.add_argument(
+        '--path_in',
+        metavar='path',
+        type=str,
+        required=True,
+        help='the path of input .mztab file'
+    )
+    my_parser.add_argument(
+        '--path_out',
+        metavar='path',
+        type=str,
+        default=os.getcwd(),
+        help='the path of folder for output .tsv file'
+    )
 
     # Execute parse_args()
     args = my_parser.parse_args()
